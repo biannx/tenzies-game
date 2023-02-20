@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import Dice from './components/dice'
-import './App.css'
+import React, { useState } from 'react';
+import { nanoid } from 'nanoid';
+import reactLogo from './assets/react.svg';
+import Dice from './components/dice';
+import './App.css';
 
 function App() {
+  const [dice, setDice] = useState(allNewDice());
+
   function allNewDice() {
-    let dice=[];
-    for(let i=0; i < 10; i++){
-      let roll = Math.ceil(Math.random() * 6);
-      dice.push(roll)
+    let newDice = [];
+    for (let i = 0; i < 10; i++) {
+      let roll = {
+        value: Math.ceil(Math.random() * 6),
+        isHeld: true,
+        id: nanoid()
+      };
+      newDice.push(roll);
     }
-    return dice
+    return newDice;
   }
 
-  console.log(allNewDice())
+  const diceElements = dice.map((die) => {
+    return <Dice key={die.id} value={die.value} isHeld={die.isHeld} />;
+  });
+
+  function rollDice() {
+    setDice(allNewDice());
+  }
+
   return (
     <main className="App">
-      <div className="dice-container">
-        <Dice value={1} />
-        <Dice value={2} />
-        <Dice value={3} />
-        <Dice value={4} />
-        <Dice value={5} />
-        <Dice value={6} />
-        <Dice value={7} />
-        <Dice value={8} />
-        <Dice value={9} />
-        <Dice value={10} />
-      </div>
+      <div className="dice-container">{diceElements}</div>
+      <button onClick={rollDice}>Roll</button>
     </main>
-  )
+  );
 }
 
-export default App
+export default App;
