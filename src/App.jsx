@@ -24,10 +24,10 @@ function App() {
     return () => clearInterval(intervalId);
   }, [dieClicked, gameWon]);
 
+  // check if all dice were held and have the same value, then the player wins
   useEffect(() => {
     const allAreHeld = dice.every(die => die.isHeld)
     const allHaveSameValue = dice.every(die => die.value === dice[0].value)
-
     if (allAreHeld && allHaveSameValue) {
       setTenzies(true)
       setGameWon(true);
@@ -44,7 +44,6 @@ function App() {
 
   function allNewDice() {
     let newDice = [];
-    
     for (let i = 0; i < 10; i++) {
       let roll = generateNewDie();
       newDice.push(roll);
@@ -66,14 +65,18 @@ function App() {
           die :
           generateNewDie()
       }))
+      // start timer when the first roll is made
+      if (!dieClicked) {
+        setDieClicked(true);
+      }
     } else {
       setTenzies(false)
       setDieClicked(false);
       setDice(allNewDice())
       setElapsedTime(0);
       setGameWon(false);
-      setRollCount(prevRoll => prevRoll + 1);
     }
+    setRollCount(prevRoll => prevRoll + 1);
   }
 
   const diceElements = dice.map((die) => {
@@ -99,9 +102,9 @@ function App() {
         Roll until all dice are the same.
         Click each die to freeze it at its current value between rolls.
       </p>
-      <p className="note">Timer only starts when a die is clicked.</p>
+      <p className="note">The timer only starts when a die is clicked or rolled.</p>
       <div className="dice-container">{diceElements}</div>
-      <button onClick={rollDice}>{tenzies ? "New Game" : "Roll"}</button>
+      <button type="button" onClick={rollDice}>{tenzies ? "New Game" : "Roll"}</button>
     </main>
   );
 }
