@@ -6,13 +6,12 @@ import './App.css';
 
 function App() {
   const [dice, setDice] = useState(allNewDice());
-  const [tenzies, setTenzies] = useState(false)
+  const [tenziesWon, setTenziesWon] = useState(false)
   const [dieClicked, setDieClicked] = useState(false);
   const [rollCount, setRollCount] = useState(0)
 
   // timer
   const [elapsedTime, setElapsedTime] = useState(0);
-  const [gameWon, setGameWon] = useState(false);
 
   useEffect(() => {
     let intervalId;
@@ -29,8 +28,7 @@ function App() {
     const allAreHeld = dice.every(die => die.isHeld)
     const allHaveSameValue = dice.every(die => die.value === dice[0].value)
     if (allAreHeld && allHaveSameValue) {
-      setTenzies(true)
-      setGameWon(true);
+      setTenziesWon(true)
     }
   }, [dice])
 
@@ -59,7 +57,7 @@ function App() {
   }
 
   function rollDice() {
-    if (!tenzies) {
+    if (!tenziesWon) {
       setDice(oldDice => oldDice.map(die => {
         return die.isHeld ?
           die :
@@ -70,11 +68,10 @@ function App() {
         setDieClicked(true);
       }
     } else {
-      setTenzies(false)
+      setTenziesWon(false)
       setDieClicked(false);
       setDice(allNewDice())
       setElapsedTime(0);
-      setGameWon(false);
     }
     setRollCount(prevRoll => prevRoll + 1);
   }
@@ -96,7 +93,7 @@ function App() {
         <div><strong>Time:</strong> {elapsedTime}s</div>
         <div><strong>No. of rolls:</strong> {rollCount}</div>
       </div>
-      {tenzies && <Confetti />}
+      {tenziesWon && <Confetti />}
       <h1 className="title">Tenzies</h1>
       <p className="instructions">
         Roll until all dice are the same.
@@ -104,7 +101,7 @@ function App() {
       </p>
       <p className="note">The timer only starts when a die is clicked or rolled.</p>
       <div className="dice-container">{diceElements}</div>
-      <button type="button" onClick={rollDice}>{tenzies ? "New Game" : "Roll"}</button>
+      <button type="button" onClick={rollDice}>{tenziesWon ? "New Game" : "Roll"}</button>
     </main>
   );
 }
