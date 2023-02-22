@@ -15,13 +15,13 @@ function App() {
 
   useEffect(() => {
     let intervalId;
-    if (dieClicked && !gameWon) {
+    if (dieClicked && !tenziesWon) {
       intervalId = setInterval(() => {
         setElapsedTime(prevElapsedTime => prevElapsedTime + 1);
       }, 1000);
     }
     return () => clearInterval(intervalId);
-  }, [dieClicked, gameWon]);
+  }, [dieClicked, tenziesWon]);
 
   // check if all dice were held and have the same value, then the player wins
   useEffect(() => {
