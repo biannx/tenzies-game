@@ -66,15 +66,18 @@ function App() {
       // start timer when the first roll is made
       if (!dieClicked) {
         setDieClicked(true);
+        setRollCount(0); // Reset the roll count to 0 when a new game is started
+      } else {
+        setRollCount(prevRoll => prevRoll + 1);
       }
     } else {
       setTenziesWon(false)
       setDieClicked(false);
       setDice(allNewDice())
       setElapsedTime(0);
+      setRollCount(0);
     }
-    setRollCount(prevRoll => prevRoll + 1);
-  }
+  }  
 
   const diceElements = dice.map((die) => {
     return (
